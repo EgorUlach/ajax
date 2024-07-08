@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic File Upload Progress</title>
+    <style>
+        #progress {
+            width: 100%;
+            background-color: #f3f3f3;
+        }
+        #progress-bar {
+            width: 0;
+            height: 30px;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="progress">
+    <div id="progress-bar">0%</div>
+</div>
+
+<script>
+    function updateProgress() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "progress.php", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                const response = JSON.parse(xhr.responseText);
+                const progressBar = document.getElementById("progress-bar");
+                progressBar.style.width = response.progress + "%";
+                progressBar.innerHTML = response.progress + "%";
+            }
+        };
+        xhr.send();
+    }
+    setInterval(updateProgress, 1000);
+</script>
+</body>
+</html>
